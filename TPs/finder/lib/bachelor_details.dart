@@ -2,19 +2,55 @@ import 'package:finder/models/bachelor.dart';
 import 'package:flutter/material.dart';
 
 class BachelorDetails extends StatefulWidget {
-  const BachelorDetails({Key? key, required this.bachelor}) : super(key: key);
+  const BachelorDetails(
+      {Key? key,
+      required this.bachelor,
+      required this.toggleLikedBachelor,
+      required this.isLiked})
+      : super(key: key);
 
   final Bachelor bachelor;
+  final VoidCallback toggleLikedBachelor;
+  final bool isLiked;
 
   @override
-  State<BachelorDetails> createState() => _BachelorDetailsState(this.bachelor);
+  State<BachelorDetails> createState() => _BachelorDetailsState(
+      this.bachelor, this.toggleLikedBachelor, this.isLiked);
 }
 
 class _BachelorDetailsState extends State<BachelorDetails> {
-  _BachelorDetailsState(this.bachelor);
+  _BachelorDetailsState(this.bachelor, this.toggleLikedBachelor, this.isLiked);
 
   final Bachelor bachelor;
-  bool _isFavorite = false;
+  final VoidCallback toggleLikedBachelor;
+  final bool isLiked;
+
+  bool? _isFavorite;
+
+  void likeBachelor(Bachelor bachelor) {
+    setState(
+      () {
+        if (_isFavorite == null) {
+          _isFavorite = !isLiked;
+        } else {
+          _isFavorite = !_isFavorite!;
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              (isLiked && _isFavorite == null || _isFavorite == true)
+                  ? "You liked ${bachelor.firstname} ${bachelor.lastname}"
+                  : "You disliked ${bachelor.firstname} ${bachelor.lastname}",
+            ),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+      },
+    );
+
+    toggleLikedBachelor();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +79,10 @@ class _BachelorDetailsState extends State<BachelorDetails> {
                 bottom: 0.0,
                 child: Icon(Icons.favorite,
                     size: 100.0,
-                    color: _isFavorite
-                        ? Colors.red
-                        : Colors.white.withOpacity(0.75),
+                    color:
+                        (isLiked && _isFavorite == null || _isFavorite == true)
+                            ? Colors.red
+                            : Colors.white.withOpacity(0.75),
                     semanticLabel: "Favorite"),
               ),
             ],
@@ -76,23 +113,15 @@ class _BachelorDetailsState extends State<BachelorDetails> {
               // Button
               const Padding(padding: EdgeInsets.all(10)),
               IconButton(
-                icon: Icon(_isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: _isFavorite ? Colors.red : Colors.grey),
-                onPressed: () {
-                  setState(() {
-                    _isFavorite = !_isFavorite;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          _isFavorite
-                              ? "You liked ${bachelor.firstname} ${bachelor.lastname}"
-                              : "You disliked ${bachelor.firstname} ${bachelor.lastname}",
-                        ),
-                        duration: const Duration(seconds: 1),
-                      ),
-                    );
-                  });
-                },
+                icon: Icon(
+                    (isLiked && _isFavorite == null || _isFavorite == true)
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color:
+                        (isLiked && _isFavorite == null || _isFavorite == true)
+                            ? Colors.red
+                            : Colors.grey),
+                onPressed: () => likeBachelor(bachelor),
               ),
             ],
           ),
