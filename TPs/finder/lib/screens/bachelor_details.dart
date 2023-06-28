@@ -1,29 +1,20 @@
+import 'package:finder/providers/bachelors_favorites_provider.dart';
 import 'package:finder/models/bachelor.dart';
 import 'package:flutter/material.dart';
 
 class BachelorDetails extends StatefulWidget {
-  const BachelorDetails(
-      {Key? key,
-      required this.bachelor,
-      required this.toggleLikedBachelor,
-      required this.isLiked})
-      : super(key: key);
+  const BachelorDetails({Key? key, required this.bachelor}) : super(key: key);
 
   final Bachelor bachelor;
-  final VoidCallback toggleLikedBachelor;
-  final bool isLiked;
 
   @override
-  State<BachelorDetails> createState() => _BachelorDetailsState(
-      this.bachelor, this.toggleLikedBachelor, this.isLiked);
+  State<BachelorDetails> createState() => _BachelorDetailsState(this.bachelor);
 }
 
 class _BachelorDetailsState extends State<BachelorDetails> {
-  _BachelorDetailsState(this.bachelor, this.toggleLikedBachelor, this.isLiked);
+  _BachelorDetailsState(this.bachelor);
 
   final Bachelor bachelor;
-  final VoidCallback toggleLikedBachelor;
-  final bool isLiked;
 
   bool? _isFavorite;
 
@@ -31,25 +22,12 @@ class _BachelorDetailsState extends State<BachelorDetails> {
     setState(
       () {
         if (_isFavorite == null) {
-          _isFavorite = !isLiked;
+          _isFavorite = !BachelorsFavoritesProvider().contains(bachelor);
         } else {
           _isFavorite = !_isFavorite!;
         }
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              (isLiked && _isFavorite == null || _isFavorite == true)
-                  ? "You liked ${bachelor.firstname} ${bachelor.lastname}"
-                  : "You disliked ${bachelor.firstname} ${bachelor.lastname}",
-            ),
-            duration: const Duration(seconds: 1),
-          ),
-        );
       },
     );
-
-    toggleLikedBachelor();
   }
 
   @override
@@ -79,10 +57,11 @@ class _BachelorDetailsState extends State<BachelorDetails> {
                 bottom: 0.0,
                 child: Icon(Icons.favorite,
                     size: 100.0,
-                    color:
-                        (isLiked && _isFavorite == null || _isFavorite == true)
-                            ? Colors.red
-                            : Colors.white.withOpacity(0.75),
+                    color: (BachelorsFavoritesProvider().contains(bachelor) &&
+                                _isFavorite == null ||
+                            _isFavorite == true)
+                        ? Colors.red
+                        : Colors.white.withOpacity(0.75),
                     semanticLabel: "Favorite"),
               ),
             ],
@@ -114,14 +93,35 @@ class _BachelorDetailsState extends State<BachelorDetails> {
               const Padding(padding: EdgeInsets.all(10)),
               IconButton(
                 icon: Icon(
-                    (isLiked && _isFavorite == null || _isFavorite == true)
+                    (BachelorsFavoritesProvider().contains(bachelor) &&
+                                _isFavorite == null ||
+                            _isFavorite == true)
                         ? Icons.favorite
                         : Icons.favorite_border,
-                    color:
-                        (isLiked && _isFavorite == null || _isFavorite == true)
-                            ? Colors.red
-                            : Colors.grey),
-                onPressed: () => likeBachelor(bachelor),
+                    color: (BachelorsFavoritesProvider().contains(bachelor) &&
+                                _isFavorite == null ||
+                            _isFavorite == true)
+                        ? Colors.red
+                        : Colors.grey),
+                onPressed: () {
+                  likeBachelor(bachelor);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        (BachelorsFavoritesProvider().contains(bachelor) &&
+                                    _isFavorite == null ||
+                                _isFavorite == true)
+                            ? "You liked ${bachelor.firstname} ${bachelor.lastname}"
+                            : "You disliked ${bachelor.firstname} ${bachelor.lastname}",
+                      ),
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
+
+                  BachelorsFavoritesProvider().toggleLikedBachelor(bachelor);
+        print(BachelorsFavoritesProvider().bachelorFavorites);
+                },
               ),
             ],
           ),

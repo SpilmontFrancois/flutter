@@ -1,18 +1,11 @@
-import 'package:finder/bachelor_details.dart';
+import 'package:finder/screens/bachelor_details.dart';
 import 'package:finder/models/bachelor.dart';
 import 'package:flutter/material.dart';
 
 class BachelorPreview extends StatelessWidget {
-  const BachelorPreview(
-      {Key? key,
-      required this.bachelor,
-      required this.toggleLikedBachelor,
-      required this.isLiked})
-      : super(key: key);
+  const BachelorPreview({Key? key, required this.bachelor}) : super(key: key);
 
   final Bachelor bachelor;
-  final VoidCallback toggleLikedBachelor;
-  final bool isLiked;
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +20,7 @@ class BachelorPreview extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BachelorDetails(
-                bachelor: bachelor,
-                toggleLikedBachelor: toggleLikedBachelor,
-                isLiked: isLiked),
+            builder: (context) => BachelorDetails(bachelor: bachelor),
           ),
         );
       },
