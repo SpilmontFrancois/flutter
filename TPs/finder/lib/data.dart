@@ -23,6 +23,7 @@ List<Bachelor> createBachelors() {
         null, faker.job.title(), faker.lorem.sentence()));
   }
 
+  bachelors.shuffle();
   return bachelors;
 }
 
