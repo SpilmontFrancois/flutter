@@ -40,7 +40,7 @@ class _BachelorDetailsState extends State<BachelorDetails> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(253, 58, 115, 1),
+        backgroundColor: Colors.teal,
         title: const Text(
           'Finder',
           style: TextStyle(

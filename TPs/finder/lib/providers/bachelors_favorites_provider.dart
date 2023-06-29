@@ -27,4 +27,9 @@ class BachelorsFavoritesProvider extends ChangeNotifier {
       add(bachelor);
     }
   }
+
+  void clearAllFavorites() {
+    _bachelorFavorites.clear();
+    notifyListeners();
+  }
 }

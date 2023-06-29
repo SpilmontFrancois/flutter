@@ -22,6 +22,7 @@ class Finder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'Finder',
       routerConfig: _router,
     );
