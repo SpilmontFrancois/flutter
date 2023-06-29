@@ -40,8 +40,14 @@ class _BachelorsMasterState extends State<BachelorsMaster> {
         child: ListView.builder(
           itemCount: bachelors.length,
           itemBuilder: (BuildContext context, int index) {
-            return BachelorPreview(
-              bachelor: bachelors[index],
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              color: bachelors[index].gender == Gender.male ? Colors.cyan : Colors.pinkAccent,
+              child: BachelorPreview(
+                bachelor: bachelors[index],
+              ),
             );
           },
         ),

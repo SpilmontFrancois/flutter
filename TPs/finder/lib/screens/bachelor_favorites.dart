@@ -1,3 +1,4 @@
+import 'package:finder/models/bachelor.dart';
 import 'package:finder/screens/bachelor_preview.dart';
 import 'package:finder/providers/bachelors_favorites_provider.dart';
 import 'package:flutter/material.dart';
@@ -41,10 +42,34 @@ class _BachelorFavoritesState extends State<BachelorFavorites> {
               .bachelorFavorites
               .length,
           itemBuilder: (BuildContext context, int index) {
-            return BachelorPreview(
-              bachelor: context
-                  .watch<BachelorsFavoritesProvider>()
-                  .bachelorFavorites[index],
+            final bachelor = context
+                .watch<BachelorsFavoritesProvider>()
+                .bachelorFavorites[index];
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              color: bachelor.gender == Gender.male
+                  ? Colors.cyan
+                  : Colors.pinkAccent,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: BachelorPreview(
+                      bachelor: bachelor,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      context
+                          .read<BachelorsFavoritesProvider>()
+                          .toggleLikedBachelor(bachelor);
+                    },
+                    icon: const Icon(Icons.heart_broken),
+                    color: Colors.white,
+                  ),
+                ],
+              ),
             );
           },
         ),

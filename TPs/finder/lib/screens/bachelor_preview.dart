@@ -13,7 +13,7 @@ class BachelorPreview extends StatelessWidget {
       leading: CircleAvatar(
         backgroundImage: AssetImage(bachelor.avatar),
       ),
-      textColor: const Color.fromARGB(255, 66, 66, 66),
+      textColor: Colors.white,
       title: Text(bachelor.firstname),
       subtitle: Text(bachelor.lastname),
       onTap: () {

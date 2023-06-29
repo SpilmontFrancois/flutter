@@ -121,7 +121,6 @@ class _BachelorDetailsState extends State<BachelorDetails> {
                   context
                       .read<BachelorsFavoritesProvider>()
                       .toggleLikedBachelor(bachelor);
-                  print(BachelorsFavoritesProvider().bachelorFavorites);
                 },
               ),
             ],
