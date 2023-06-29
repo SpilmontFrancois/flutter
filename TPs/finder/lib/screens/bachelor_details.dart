@@ -1,7 +1,9 @@
 import 'package:finder/providers/bachelors_favorites_provider.dart';
 import 'package:finder/models/bachelor.dart';
+import 'package:finder/providers/bachelors_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 class BachelorDetails extends StatefulWidget {
   const BachelorDetails({Key? key, required this.bachelor}) : super(key: key);
@@ -94,35 +96,55 @@ class _BachelorDetailsState extends State<BachelorDetails> {
                   style: const TextStyle(fontSize: 15)),
               // Button
               const Padding(padding: EdgeInsets.all(10)),
-              IconButton(
-                icon: Icon(
-                    (_isLiked! && _isFavorite == null || _isFavorite == true)
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color: (_isLiked! && _isFavorite == null ||
-                            _isFavorite == true)
-                        ? Colors.red
-                        : Colors.grey),
-                onPressed: () {
-                  likeBachelor(bachelor);
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.heart_broken, color: Colors.grey),
+                    onPressed: () {
+                      context
+                          .read<BachelorsProvider>()
+                          .dislikeBachelor(bachelor);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("You disliked a bachelor"),
+                        ),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
                         (_isLiked! && _isFavorite == null ||
                                 _isFavorite == true)
-                            ? "You liked ${bachelor.firstname} ${bachelor.lastname}"
-                            : "You disliked ${bachelor.firstname} ${bachelor.lastname}",
-                      ),
-                      duration: const Duration(seconds: 1),
-                    ),
-                  );
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: (_isLiked! && _isFavorite == null ||
+                                _isFavorite == true)
+                            ? Colors.red
+                            : Colors.grey),
+                    onPressed: () {
+                      likeBachelor(bachelor);
 
-                  context
-                      .read<BachelorsFavoritesProvider>()
-                      .toggleLikedBachelor(bachelor);
-                },
-              ),
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            (_isLiked! && _isFavorite == null ||
+                                    _isFavorite == true)
+                                ? "You liked ${bachelor.firstname} ${bachelor.lastname}"
+                                : "You disliked ${bachelor.firstname} ${bachelor.lastname}",
+                          ),
+                          duration: const Duration(seconds: 1),
+                        ),
+                      );
+
+                      context
+                          .read<BachelorsFavoritesProvider>()
+                          .toggleLikedBachelor(bachelor);
+                    },
+                  ),
+                ],
+              )
             ],
           ),
         ],
