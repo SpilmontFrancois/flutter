@@ -2,6 +2,7 @@ import 'package:finder/screens/bachelor_preview.dart';
 import 'package:finder/providers/bachelors_favorites_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class BachelorFavorites extends StatefulWidget {
   const BachelorFavorites({Key? key}) : super(key: key);
@@ -35,10 +36,15 @@ class _BachelorFavoritesState extends State<BachelorFavorites> {
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: ListView.builder(
-          itemCount: BachelorsFavoritesProvider().bachelorFavorites.length,
+          itemCount: context
+              .watch<BachelorsFavoritesProvider>()
+              .bachelorFavorites
+              .length,
           itemBuilder: (BuildContext context, int index) {
             return BachelorPreview(
-              bachelor: BachelorsFavoritesProvider().bachelorFavorites[index],
+              bachelor: context
+                  .watch<BachelorsFavoritesProvider>()
+                  .bachelorFavorites[index],
             );
           },
         ),

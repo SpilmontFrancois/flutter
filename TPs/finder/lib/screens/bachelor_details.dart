@@ -1,6 +1,7 @@
 import 'package:finder/providers/bachelors_favorites_provider.dart';
 import 'package:finder/models/bachelor.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BachelorDetails extends StatefulWidget {
   const BachelorDetails({Key? key, required this.bachelor}) : super(key: key);
@@ -17,12 +18,13 @@ class _BachelorDetailsState extends State<BachelorDetails> {
   final Bachelor bachelor;
 
   bool? _isFavorite;
+  late bool? _isLiked;
 
   void likeBachelor(Bachelor bachelor) {
     setState(
       () {
         if (_isFavorite == null) {
-          _isFavorite = !BachelorsFavoritesProvider().contains(bachelor);
+          _isFavorite = !_isLiked!;
         } else {
           _isFavorite = !_isFavorite!;
         }
@@ -32,6 +34,8 @@ class _BachelorDetailsState extends State<BachelorDetails> {
 
   @override
   Widget build(BuildContext context) {
+    _isLiked = context.watch<BachelorsFavoritesProvider>().contains(bachelor);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(253, 58, 115, 1),
@@ -57,8 +61,7 @@ class _BachelorDetailsState extends State<BachelorDetails> {
                 bottom: 0.0,
                 child: Icon(Icons.favorite,
                     size: 100.0,
-                    color: (BachelorsFavoritesProvider().contains(bachelor) &&
-                                _isFavorite == null ||
+                    color: (_isLiked! && _isFavorite == null ||
                             _isFavorite == true)
                         ? Colors.red
                         : Colors.white.withOpacity(0.75),
@@ -93,13 +96,10 @@ class _BachelorDetailsState extends State<BachelorDetails> {
               const Padding(padding: EdgeInsets.all(10)),
               IconButton(
                 icon: Icon(
-                    (BachelorsFavoritesProvider().contains(bachelor) &&
-                                _isFavorite == null ||
-                            _isFavorite == true)
+                    (_isLiked! && _isFavorite == null || _isFavorite == true)
                         ? Icons.favorite
                         : Icons.favorite_border,
-                    color: (BachelorsFavoritesProvider().contains(bachelor) &&
-                                _isFavorite == null ||
+                    color: (_isLiked! && _isFavorite == null ||
                             _isFavorite == true)
                         ? Colors.red
                         : Colors.grey),
@@ -109,8 +109,7 @@ class _BachelorDetailsState extends State<BachelorDetails> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        (BachelorsFavoritesProvider().contains(bachelor) &&
-                                    _isFavorite == null ||
+                        (_isLiked! && _isFavorite == null ||
                                 _isFavorite == true)
                             ? "You liked ${bachelor.firstname} ${bachelor.lastname}"
                             : "You disliked ${bachelor.firstname} ${bachelor.lastname}",
@@ -119,8 +118,10 @@ class _BachelorDetailsState extends State<BachelorDetails> {
                     ),
                   );
 
-                  BachelorsFavoritesProvider().toggleLikedBachelor(bachelor);
-        print(BachelorsFavoritesProvider().bachelorFavorites);
+                  context
+                      .read<BachelorsFavoritesProvider>()
+                      .toggleLikedBachelor(bachelor);
+                  print(BachelorsFavoritesProvider().bachelorFavorites);
                 },
               ),
             ],
