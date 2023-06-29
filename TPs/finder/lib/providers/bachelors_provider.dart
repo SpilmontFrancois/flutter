@@ -8,7 +8,15 @@ class BachelorsProvider extends ChangeNotifier {
   List<Bachelor> get bachelors => _bachelors;
 
   void dislikeBachelor(Bachelor bachelor) {
-    bachelor.setIsRemoved(true);
+    bachelor.setIsDisliked(true);
+    notifyListeners();
+  }
+
+  void search(String value) {
+    _bachelors.forEach((bachelor) {
+      bachelor.setIsShow(
+          bachelor.firstname.toLowerCase().contains(value.toLowerCase()));
+    });
     notifyListeners();
   }
 }

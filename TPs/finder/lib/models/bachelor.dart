@@ -6,14 +6,19 @@ class Bachelor {
   List<Gender>? searchFor;
   String? job;
   String? description;
-  bool isRemoved = false;
+  bool isDisliked = false;
+  bool show = true;
 
   Bachelor(this.firstname, this.lastname, this.gender, this.avatar,
       [this.searchFor, this.job, this.description]);
 
-  void setIsRemoved(bool isRemoved) {
-    this.isRemoved = isRemoved;
+  void setIsDisliked(bool isDisliked) {
+    this.isDisliked = isDisliked;
+  }
+
+  void setIsShow(bool show) {
+    this.show = show;
   }
 }
 
-enum Gender { male, female }
+enum Gender { male, female, all }
