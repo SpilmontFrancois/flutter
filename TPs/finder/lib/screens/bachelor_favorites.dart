@@ -39,51 +39,59 @@ class _BachelorFavoritesState extends State<BachelorFavorites> {
                 .watch<BachelorsFavoritesProvider>()
                 .bachelorFavorites[index];
 
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              color: bachelor.gender == Gender.male
-                  ? Colors.cyan
-                  : Colors.pinkAccent,
-              child: Column(
-                children: [
-                  const Padding(padding: EdgeInsets.all(20)),
-                  Container(
-                    width: 150,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage(bachelor.avatar),
-                        fit: BoxFit.fill,
+            return Dismissible(
+              key: Key(bachelor.firstname + bachelor.lastname),
+              onDismissed: (direction) {
+                context
+                    .read<BachelorsFavoritesProvider>()
+                    .toggleLikedBachelor(bachelor);
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                color: bachelor.gender == Gender.male
+                    ? Colors.cyan
+                    : Colors.pinkAccent,
+                child: Column(
+                  children: [
+                    const Padding(padding: EdgeInsets.all(20)),
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: AssetImage(bachelor.avatar),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(bachelor.firstname,
-                          style: const TextStyle(
-                              fontSize: 30, color: Colors.white)),
-                      Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Text(bachelor.lastname,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(bachelor.firstname,
                             style: const TextStyle(
                                 fontSize: 30, color: Colors.white)),
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      context
-                          .read<BachelorsFavoritesProvider>()
-                          .toggleLikedBachelor(bachelor);
-                    },
-                    icon: const Icon(Icons.heart_broken),
-                    color: Colors.white,
-                  ),
-                ],
+                        Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Text(bachelor.lastname,
+                              style: const TextStyle(
+                                  fontSize: 30, color: Colors.white)),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        context
+                            .read<BachelorsFavoritesProvider>()
+                            .toggleLikedBachelor(bachelor);
+                      },
+                      icon: const Icon(Icons.heart_broken),
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -103,30 +111,38 @@ class _BachelorFavoritesState extends State<BachelorFavorites> {
                 .watch<BachelorsFavoritesProvider>()
                 .bachelorFavorites[index];
 
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              color: bachelor.gender == Gender.male
-                  ? Colors.cyan
-                  : Colors.pinkAccent,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: BachelorPreview(
-                      bachelor: bachelor,
+            return Dismissible(
+              key: Key(bachelor.firstname + bachelor.lastname),
+              onDismissed: (direction) {
+                context
+                    .read<BachelorsFavoritesProvider>()
+                    .toggleLikedBachelor(bachelor);
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                color: bachelor.gender == Gender.male
+                    ? Colors.cyan
+                    : Colors.pinkAccent,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: BachelorPreview(
+                        bachelor: bachelor,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      context
-                          .read<BachelorsFavoritesProvider>()
-                          .toggleLikedBachelor(bachelor);
-                    },
-                    icon: const Icon(Icons.heart_broken),
-                    color: Colors.white,
-                  ),
-                ],
+                    IconButton(
+                      onPressed: () {
+                        context
+                            .read<BachelorsFavoritesProvider>()
+                            .toggleLikedBachelor(bachelor);
+                      },
+                      icon: const Icon(Icons.heart_broken),
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
               ),
             );
           },
